@@ -1,0 +1,69 @@
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: 'true'
+  web:
+    resources:
+      add-mappings: true
+  mail:
+    host: smtp.mail.ru
+    username: ''
+    protocol: smtps
+    port: '465'
+    smtps:
+      auth: 'true'
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    password: ''
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: validate
+  application:
+    name: Sender
+  datasource:
+    url: jdbc:postgresql://localhost:5432/yoga_bot #jdbc:postgresql://db:5432/yoga_bot #jdbc:postgresql://localhost:5432/yoga_bot
+    username: lol
+    password: lol
+    driver-class-name: org.postgresql.Driver
+
+logging:
+  level:
+    org:springframework.security: DEBUG  # Логирование для Spring Security
+    org.springframework.web: DEBUG
+    org.springdoc: DEBUG
+
+server:
+  port: '8082'
+#springdoc:
+#  swagger-ui:
+#    enabled: true
+#  api-docs:
+#    path: /v3/api-docs
+springdoc:
+  api-docs:
+    path: /v3/api-docs # Путь к API документации
+  swagger-ui:
+    path: /swagger-ui.html # Путь к Swagger UI
+    packages-to-scan: com.example.Sender # Укажите базовый пакет, где находятся ваши контроллеры
+    default-produces-media-type: application/json # Убедитесь, что формат ответа JSON
+    model-converters:
+      enabled: true
+#  swagger-ui:
+#    path: /custom-swagger-ui
+#    enabled: true
+#  api-docs:
+#    path: /v3/api-docs
+  api:
+    contact:
+      name: Your_name
+      email: your_mail
+      url: https://example.com
+    description: API
+    title: Your_title
+    version: 1.0.0

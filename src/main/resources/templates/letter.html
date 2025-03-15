@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Cormorant Infant' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" type="text/css"/>
+    <title>Сообщения от [[${#temporals.format(newsletter.dateTime, 'HH:mm:ss  dd.MM.yy')}]]</title>
+    <link rel="shortcut icon" th:href="@{/logo.png}" />
+</head>
+<body>
+<div class="left">
+    <ul class="nav">
+        <li><a th:href="@{/sender/main}">Рассылка<br>
+            <i class="material-icons">mail</i></a></li>
+        <li><a th:href="@{/notification/main}">Уведомления<br>
+            <i class="material-icons">contact_mail</i></a></li>
+        <li><a th:href="@{/db/main}">База данных<br>
+            <i class="material-icons">account_balance</i></a></li>
+        <chosen><li><a th:href="@{/history/main}">История<br>
+            <i class="material-icons">storage</i></a></li></chosen>
+        <img th:src="@{/css/logo.png}" width="100" height="100"/>
+    </ul>
+</div>
+<div class="head_title">
+    <header>Сообщение от [[${#temporals.format(newsletter.dateTime, 'HH:mm:ss  dd.MM.yy')}]]<br>
+        <!--        <i class="material-icons">storage</i>-->
+    </header>
+</div>
+<div class="main">
+    <table id="textTable">
+        <tr>
+            <th>Текст сообщения</th>
+        </tr>
+        <tr>
+            <td th:text="${newsletter.text}"></td>
+        </tr>
+    </table>
+</div>
+
+<div class="main">
+    <table id="myTable">
+        <tr>
+            <th>Адрес (кому)</th>
+            <th>Статус отправки</th>
+        </tr>
+        <tr th:each="letter : ${newsletter.letters}">
+            <td th:text="${letter.destinationAddress}"></td>
+            <td th:text="${letter.sentStatus}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

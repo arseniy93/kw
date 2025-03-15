@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}" media="screen" type="text/css"/>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Cormorant Infant' rel='stylesheet'>
+    <title>Авторизация</title>
+    <link rel="shortcut icon" th:href="@{/css/logo.png}" />
+</head>
+<body>
+    <header>Авторизация</header>
+    <div id="square">
+        <div id="login">
+            <form  method="post" th:action="@{/index}">
+                <fieldset class="clearfix">
+                    <p><span class="fontawesome-user">Логин: </span><input type="text" name="username" onBlur="if(this.value == '') this.value = 'Логин'" onFocus="if(this.value == 'Логин') this.value = ''" required></p>
+                    <p><span class="fontawesome-lock">Пароль: </span><input type="password" name="password" onBlur="if(this.value == '') this.value = 'Пароль'" onFocus="if(this.value == 'Пароль') this.value = ''" required></p>
+                    <p><input type="submit" value="Вход"></p>
+                </fieldset>
+            </form>
+
+        </div>
+        <img th:src="@{/css/logo.png}" width="100" height="100"/>
+    </div>
+</body>
+</html>
