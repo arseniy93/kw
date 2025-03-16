@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping(value = DBRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DBRestController {
 
@@ -49,8 +51,12 @@ public class DBRestController {
 
     @DeleteMapping(value = "/delete/{email}/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deletePerson(@PathVariable String email, @PathVariable String type) {
-        dbService.deletePerson(email, type);
-        return ResponseEntity.ofNullable("Person is not found");
+        var isDeleted=dbService.deletePerson(email, type);
+        if (isDeleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Person not found or could not be deleted.");
+        }
     }
 
 

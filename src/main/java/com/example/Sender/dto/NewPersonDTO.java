@@ -8,6 +8,6 @@ public class NewPersonDTO {
     private String firstname;
     private String middlename;
     private String type;
-    private String userAge;
+    private String entity;
     private String mail;
 }

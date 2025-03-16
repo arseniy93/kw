@@ -1,13 +1,15 @@
 package com.example.Sender.repository;
 
+import com.example.Sender.enums.EntityType;
 import com.example.Sender.models.Employee;
-import com.example.Sender.models.EmployeeType;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
-    List<Employee> getEmployeesByEmployeeType(EmployeeType employeeType);
+public interface EmployeeRepository extends CrudRepository<Employee, Long> {
+    List<Employee> getEmployeesByEmployeeEntityType(EntityType employeeType);//clean cash
 
-    Employee getEmployeeByEmail(String email);
+
+    Optional<Employee> findEmployeeByEmail(String email);
 }

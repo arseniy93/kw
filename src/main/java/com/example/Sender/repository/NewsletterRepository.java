@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDateTime;
 
-public interface NewsletterRepository extends CrudRepository<Newsletter, Integer> {
+public interface NewsletterRepository extends CrudRepository<Newsletter, Long> {
     Newsletter getByDateTime(LocalDateTime dateTime);
 }

@@ -1,6 +1,9 @@
 package com.example.Sender.models;
 
+import com.example.Sender.annotations.CustomEmail;
+import com.example.Sender.enums.EntityType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Data
@@ -9,7 +12,7 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String firstname;
@@ -17,13 +20,15 @@ public class Client {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String lastname;
 
-    @Column(columnDefinition = "TEXT", nullable = true)
+    @Column(columnDefinition = "TEXT")
     private String middleName;
 
-    @ManyToOne
-    @JoinColumn(name = "client_type_id", nullable = false)
-    private ClientType clientType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "client_type", nullable = false)
+    private EntityType clientEntityType;
 
+    @CustomEmail
+    @Email
     @Column(columnDefinition = "TEXT", nullable = false, unique = true)
     private String email;
 

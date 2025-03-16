@@ -23,7 +23,7 @@ spring:
   jpa:
     database: postgresql
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
   application:
     name: Sender
   datasource:
@@ -40,11 +40,6 @@ logging:
 
 server:
   port: '8082'
-#springdoc:
-#  swagger-ui:
-#    enabled: true
-#  api-docs:
-#    path: /v3/api-docs
 springdoc:
   api-docs:
     path: /v3/api-docs # Путь к API документации
@@ -54,11 +49,6 @@ springdoc:
     default-produces-media-type: application/json # Убедитесь, что формат ответа JSON
     model-converters:
       enabled: true
-#  swagger-ui:
-#    path: /custom-swagger-ui
-#    enabled: true
-#  api-docs:
-#    path: /v3/api-docs
   api:
     contact:
       name: Your_name

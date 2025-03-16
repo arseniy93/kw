@@ -1,21 +1,22 @@
 package com.example.Sender.services;
 
 
+import com.example.Sender.enums.EntityType;
 import com.example.Sender.models.Client;
-import com.example.Sender.models.ClientType;
 import com.example.Sender.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ClientService {
     private final ClientRepository clientRepository;
 
-    public List<Client> getAllClientByClientType(ClientType clientType) {
-        return clientRepository.getAllByClientType(clientType);
+    public List<Client> getAllClientByClientType(EntityType entityType) {
+        return clientRepository.getAllByClientEntityType(entityType);
     }
 
     public Client getClientByEmail(String email) {
@@ -30,7 +31,12 @@ public class ClientService {
         clientRepository.save(client);
     }
 
-    public void deleteClient(Client client){
+
+    public Optional<Client> findClientByEmail(String email) {
+        return clientRepository.findClientByEmail(email);
+    }
+
+    public void deleteClient(Client client) {
         clientRepository.delete(client);
     }
 

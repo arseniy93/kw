@@ -11,7 +11,7 @@ import java.util.List;
 public class Newsletter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private LocalDateTime dateTime;

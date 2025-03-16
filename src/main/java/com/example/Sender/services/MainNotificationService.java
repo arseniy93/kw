@@ -5,7 +5,7 @@ import com.example.Sender.dto.NotificationDTO;
 import com.example.Sender.models.*;
 import com.example.Sender.repository.*;
 import com.example.Sender.services.mail.MailSenderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,59 +18,54 @@ import java.util.concurrent.Future;
 
 
 @Service
+@RequiredArgsConstructor
 public class MainNotificationService {
 
-    @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
-    private ClientTypeRepository clientTypeRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    private EmployeeTypeRepository employeeTypeRepository;
-    @Autowired
-    private LetterRepository letterRepository;
-    @Autowired
-    private NewsletterRepository newsletterRepository;
+    private final ClientService clientService;
+    private  final EmployeeService employeeService;
 
+    private final LetterRepository letterRepository;
+    private final NewsletterRepository newsletterRepository;
     private final MailSenderService mailSenderService;
+    private final EntityTypeService entityTypeService;
 
-    public MainNotificationService(MailSenderService mailSenderService) {
-        this.mailSenderService = mailSenderService;
-    }
 
 
     public void send(NotificationDTO notificationDTO, boolean flag) {
-        String type = notificationDTO.getClientType();
+        String type = notificationDTO.getEntityType();
         String topic = notificationDTO.getTopicText();
         String message = notificationDTO.getMessageText();
-        LocalDateTime dateTime = LocalDateTime.now();
+        var dateTime = LocalDateTime.now();
 
         Newsletter newsletter = new Newsletter();
         newsletter.setDateTime(dateTime);
         newsletter.setText(message);
         newsletter.setTopic(topic);
 
+        var notificationType = entityTypeService.getEntityTypeByParameter(notificationDTO.getEntityType());
+
         List<String> mailAddresses;
         if (flag) {
             newsletter.setDestination("Сотрудники");
             if (type.equals("все")) {
-                List<Employee> employees = (List<Employee>) employeeRepository.findAll();
+                List<Employee> employees = (List<Employee>) employeeService.getAllEmployee();
                 mailAddresses = employees.stream().map(Employee::getEmail).toList();
             } else {
                 //TODO check notification set aop
-                EmployeeType employeeType = employeeTypeRepository.getEmployeeTypeById(Integer.parseInt(notificationDTO.getClientType()));
-                mailAddresses = employeeRepository.getEmployeesByEmployeeType(employeeType)
-                        .stream().map(Employee::getEmail).toList();
+                mailAddresses = employeeService.getAllEmployeesByEmployeeEntityType(notificationType)
+                        .stream()
+                        .map(Employee::getEmail)
+                        .toList();
             }
         } else {
             newsletter.setDestination("Клиенты");
             if (type.equals("все")) {
-                List<Client> employees = (List<Client>) clientRepository.findAll();
+                List<Client> employees = clientService.getClients();
                 mailAddresses = employees.stream().map(Client::getEmail).toList();
             } else {
-                ClientType clientType = clientTypeRepository.getClientTypeById(Integer.parseInt(notificationDTO.getClientType()));
-                mailAddresses = clientRepository.getAllByClientType(clientType)
+                //TODO check notification set aop
+                entityTypeService.getEntityTypeByParameter(notificationDTO.getEntityType());
+                mailAddresses = clientService.getAllClientByClientType(notificationType)
                         .stream().map(Client::getEmail).toList();
             }
         }

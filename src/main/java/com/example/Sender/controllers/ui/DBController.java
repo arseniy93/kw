@@ -3,6 +3,7 @@ package com.example.Sender.controllers.ui;
 import com.example.Sender.dto.NewPersonDTO;
 import com.example.Sender.dto.PersonDTO;
 import com.example.Sender.services.DBService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/db")
+@RequiredArgsConstructor
 public class DBController {
-    DBService dbService;
 
-    public DBController(DBService dbService) {
-        this.dbService = dbService;
-    }
+    private final DBService dbService;
 
     @GetMapping("/main")
     public String mainPage(Model model) {
@@ -37,7 +36,7 @@ public class DBController {
 
     @PostMapping(
             value = "/save",
-            produces = MediaType.APPLICATION_JSON_VALUE,
+//            produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public String saveForm(@RequestBody NewPersonDTO newPersonDTO) {
         dbService.savePerson(newPersonDTO);
@@ -57,10 +56,21 @@ public class DBController {
         }
     }
 
+//    @DeleteMapping("/delete/{email}/{type}")
+//    public String delete(@PathVariable String email, @PathVariable String type) {
+//        dbService.deletePerson(email, type);
+//        return "redirect:/db/main";
+//    }
+
     @DeleteMapping("/delete/{email}/{type}")
-    public String delete(@PathVariable String email, @PathVariable String type) {
-        dbService.deletePerson(email, type);
-        return "redirect:/db/main";
+    public ResponseEntity<String> delete(@PathVariable String email, @PathVariable String type) {
+        try {
+            dbService.deletePerson(email, type);
+            return ResponseEntity.ok("Удаление выполнено успешно");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ошибка при удалении: " + e.getMessage());
+        }
     }
 
 }

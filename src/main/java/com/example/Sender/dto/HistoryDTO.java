@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class HistoryDTO {
-    private Integer id;
+    private Long id;
     private LocalDateTime dateTime;
     private String destination;
     private String text;
