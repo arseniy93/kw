@@ -5,7 +5,7 @@ import com.example.Sender.dto.NotificationDTO;
 import com.example.Sender.models.*;
 import com.example.Sender.repository.*;
 import com.example.Sender.services.mail.MailSenderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,28 +16,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-
+@RequiredArgsConstructor
 @Service
 public class MainNotificationService {
-
-    @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
-    private ClientTypeRepository clientTypeRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    private EmployeeTypeRepository employeeTypeRepository;
-    @Autowired
-    private LetterRepository letterRepository;
-    @Autowired
-    private NewsletterRepository newsletterRepository;
-
+    private final ClientTypeService clientTypeService;
+    private final ClientService clientService;
+    private final EmployeeService employeeService;
+    private final EmployeeTypeService employeeTypeService;
+    private final LetterRepository letterRepository;
+    private final NewsLetterService letterService;
     private final MailSenderService mailSenderService;
 
-    public MainNotificationService(MailSenderService mailSenderService) {
-        this.mailSenderService = mailSenderService;
-    }
 
 
     public void send(NotificationDTO notificationDTO, boolean flag) {
@@ -55,22 +44,22 @@ public class MainNotificationService {
         if (flag) {
             newsletter.setDestination("Сотрудники");
             if (type.equals("все")) {
-                List<Employee> employees = (List<Employee>) employeeRepository.findAll();
+                List<Employee> employees = employeeService.getAllEmployee();
                 mailAddresses = employees.stream().map(Employee::getEmail).toList();
             } else {
                 //TODO check notification set aop
-                EmployeeType employeeType = employeeTypeRepository.getEmployeeTypeById(Integer.parseInt(notificationDTO.getClientType()));
-                mailAddresses = employeeRepository.getEmployeesByEmployeeType(employeeType)
+                EmployeeType employeeType = employeeTypeService.getEmployeeTypeByName(notificationDTO.getClientType());
+                mailAddresses = employeeService.getAllEmployeeByEmployeeType(employeeType)
                         .stream().map(Employee::getEmail).toList();
             }
         } else {
             newsletter.setDestination("Клиенты");
             if (type.equals("все")) {
-                List<Client> employees = (List<Client>) clientRepository.findAll();
+                List<Client> employees = clientService.getClients();
                 mailAddresses = employees.stream().map(Client::getEmail).toList();
             } else {
-                ClientType clientType = clientTypeRepository.getClientTypeById(Integer.parseInt(notificationDTO.getClientType()));
-                mailAddresses = clientRepository.getAllByClientType(clientType)
+                ClientType clientType = clientTypeService.getClientTypeByName(notificationDTO.getClientType());
+                mailAddresses = clientService.getAllClientByClientType(clientType)
                         .stream().map(Client::getEmail).toList();
             }
         }
@@ -115,10 +104,10 @@ public class MainNotificationService {
         }
 
         newsletter.setStatus(fullStatus);
-        newsletterRepository.save(newsletter);
+        letterService.save(newsletter);
 
         for (var letter : letters) {
-            letter.setNewsletter(newsletterRepository.getByDateTime(dateTime));
+            letter.setNewsletter(letterService.getByDateTime(dateTime));
             letterRepository.save(letter);
         }
     }

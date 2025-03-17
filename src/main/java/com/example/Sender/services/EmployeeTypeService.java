@@ -14,8 +14,8 @@ public class EmployeeTypeService {
 
 
 
-    public EmployeeType getEmployeeTypeById(Integer id){
-        return employeeTypeRepository.getEmployeeTypeById(id);
+    public EmployeeType getEmployeeTypeByName(String name){
+        return employeeTypeRepository.getEmployeeTypeByName(name);
     }
 
 }

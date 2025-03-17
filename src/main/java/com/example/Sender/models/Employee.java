@@ -1,5 +1,6 @@
 package com.example.Sender.models;
 
+import com.example.Sender.annotations.CustomEmail;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,9 +21,10 @@ public class Employee {
     private String middleName;
 
     @ManyToOne
-    @JoinColumn(name = "employee_type_id", nullable = false)
+    @JoinColumn(name = "employee_type_id")
     private EmployeeType employeeType;
 
+    @CustomEmail
     @Column(columnDefinition = "TEXT", nullable = false, unique = true)
     private String email;
 

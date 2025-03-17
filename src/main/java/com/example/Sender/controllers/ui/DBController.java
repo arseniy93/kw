@@ -37,7 +37,7 @@ public class DBController {
 
     @PostMapping(
             value = "/save",
-            produces = MediaType.APPLICATION_JSON_VALUE,
+//            produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public String saveForm(@RequestBody NewPersonDTO newPersonDTO) {
         dbService.savePerson(newPersonDTO);

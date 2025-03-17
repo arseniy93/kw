@@ -2,7 +2,7 @@ package com.example.Sender.services;
 
 import com.example.Sender.dto.HistoryDTO;
 import com.example.Sender.models.Newsletter;
-import com.example.Sender.repository.NewsletterRepository;
+import com.example.Sender.repository.NewsLetterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class HistoryService {
 
     @Autowired
-    private NewsletterRepository newsletterRepository;
+    private NewsLetterRepository newsletterRepository;
     public List<HistoryDTO> getHistory() {
         List<Newsletter> newsletters = (List<Newsletter>) newsletterRepository.findAll();
         return newsletters.stream()

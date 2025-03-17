@@ -5,7 +5,6 @@ import com.example.Sender.dto.PersonDTO;
 import com.example.Sender.models.Client;
 import com.example.Sender.models.Employee;
 import com.opencsv.CSVReader;
-import com.example.Sender.services.ClientTypeService;
 import com.opencsv.exceptions.CsvValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,9 +18,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.example.Sender.constants.Constants.CLIENT;
+import static com.example.Sender.constants.Constants.EMPLOYEE;
+
 @Service
 @RequiredArgsConstructor
 public class DBService {
+
     //TODO set service for all repository
     private final ClientService clientService;
     private final ClientTypeService clientTypeService;
@@ -38,7 +41,7 @@ public class DBService {
                         client.getFirstname(),
                         client.getLastname(),
                         client.getMiddleName(),
-                        "Клиент: " + client.getClientType().getName(),
+                        CLIENT+": " + client.getClientType().getName(),
                         client.getEmail()
                 )),
                 employees.stream().map(employee -> new PersonDTO(
@@ -46,20 +49,20 @@ public class DBService {
                         employee.getFirstname(),
                         employee.getLastname(),
                         employee.getMiddleName(),
-                        "Сотрудник: " + employee.getEmployeeType().getName(),
+                        EMPLOYEE+": " + employee.getEmployeeType().getName(),
                         employee.getEmail()
                 ))
         ).collect(Collectors.toList());
     }
-
+//TODO getUserAge
     public void savePerson(NewPersonDTO personDTO) {
-        if (personDTO.getType().equals("employee") || personDTO.getType().equals("Сотрудник")) {
+        if (personDTO.getType().equals("employee") || personDTO.getType().equals(EMPLOYEE)) {
             Employee person = new Employee();
             person.setEmail(personDTO.getMail());
             person.setFirstname(personDTO.getFirstname());
             person.setLastname(personDTO.getLastname());
             person.setMiddleName(personDTO.getMiddlename());
-            person.setEmployeeType(employeeTypeService.getEmployeeTypeById(1));//getUserAge()?
+            person.setEmployeeType(employeeTypeService.getEmployeeTypeByName("новый"));//TODO на стороне фронта пустой фрагамент - Давность пользователя , нужно вставить personDTO.getUserAge() после исправления
             employeeService.saveEmployee(person);
         } else {
             Client person = new Client();
@@ -67,13 +70,13 @@ public class DBService {
             person.setFirstname(personDTO.getFirstname());
             person.setLastname(personDTO.getLastname());
             person.setMiddleName(personDTO.getMiddlename());
-            person.setClientType(clientTypeService.getClientTypeById(1));//getUserAge()
+            person.setClientType(clientTypeService.getClientTypeByName(personDTO.getUserAge()));
             clientService.saveClient(person);
         }
     }
 
     public void deletePerson(String email, String type) {
-        if (type.startsWith("Клиент")) {
+        if (type.toLowerCase().startsWith(CLIENT)) {
             Client client = clientService.getClientByEmail(email);
             clientService.deleteClient(client);
         } else {

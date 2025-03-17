@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 public class ClientTypeService {
     private final ClientTypeRepository clientTypeRepository;
 
-    public ClientType getClientTypeById(Integer id) {
-        return clientTypeRepository.getClientTypeById(id);
+    public ClientType getClientTypeByName(String name) {
+        return clientTypeRepository.getClientTypeByName(name);
     }
 
 
